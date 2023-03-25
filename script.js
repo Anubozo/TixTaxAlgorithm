@@ -31,7 +31,7 @@ for (let i = 0; i < ticTacToeNumber; i++) {
       const smallRow = document.createElement("tr"); // Now we make smol box roes
       bigBox.appendChild(smallRow); // Now we append smol box roes!!!
       tixTaxMatrixRender[i][j][k] = [[], [], []]; // Now dis makes the smol boi boxes in the smol box roes
-      tixTaxMatrixValue[i][j][k] = [[""], [""], [""]]; // Now dis makes the smol boi boxes in the smol box roes
+      tixTaxMatrixValue[i][j][k] = ["", "", ""]; // Now dis makes the smol boi boxes in the smol box roes
       for (let l = 0; l < ticTacToeNumber; l++) {
         const btn = document.createElement("button"); // Dis make button (hehe butt- (I apologize)) to put in smol boi box
         btn.id = "box" + i + j + k + l;
@@ -59,13 +59,23 @@ function buttonOut() {
 
 function clickAlert() {
   console.log("one of 'em did da clickin' on the box called " + this.id);
+  let location = this.id.slice(-4);
+
   if (turn) {
     this.style.backgroundColor = "#AC5754";
+    tixTaxMatrixValue[location[0]][location[1]][location[2]][location[3]] = "X";
   } else {
     this.style.backgroundColor = "#7295B9";
+    tixTaxMatrixValue[location[0]][location[1]][location[2]][location[3]] = "O";
   }
   this.disabled = true;
   turn = !turn;
+
+  checkIfBoxMade();
 }
 
-console.log(tixTaxMatrixValue); // Now we log da matrix
+function checkIfBoxMade() {
+  // here we do the algorithm to check if smol box made
+}
+
+// console.log(tixTaxMatrixValue); // Now we log da matrix
