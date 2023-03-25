@@ -3,6 +3,7 @@ const table = document.createElement("table");
 table.id = "bigBoiTable";
 body.appendChild(table);
 let turn = false;
+let enabledBigBox = "all";
 
 // Matrix to be rendered
 let tixTaxMatrixRender = [];
@@ -37,7 +38,7 @@ for (let i = 0; i < ticTacToeNumber; i++) {
         btn.id = "box" + i + j + k + l;
         btn.addEventListener("mouseover", buttonOver);
         btn.addEventListener("mouseout", buttonOut);
-        btn.addEventListener("click", clickAlert);
+        btn.addEventListener("click", clickidy);
         tixTaxMatrixRender[i][j][k][l] = btn; // Dis put button in smol boi box
         smallRow.appendChild(document.createElement("td").appendChild(btn)); // Now we append smol box buttons!!!
       }
@@ -45,6 +46,7 @@ for (let i = 0; i < ticTacToeNumber; i++) {
   }
 }
 
+// The function to highlight the button when hovered
 function buttonOver() {
   if (turn) {
     this.style.backgroundColor = "#E77471";
@@ -53,11 +55,13 @@ function buttonOver() {
   }
 }
 
+// The function to dishighlight? the button when not hovered
 function buttonOut() {
   this.style.backgroundColor = "#FFFFFF";
 }
 
-function clickAlert() {
+// Da function fo wen da user does da ting where they do da clik
+function clickidy() {
   console.log("one of 'em did da clickin' on the box called " + this.id);
   let location = this.id.slice(-4);
 
@@ -71,11 +75,30 @@ function clickAlert() {
   this.disabled = true;
   turn = !turn;
 
+  enabledBigBox = [location[2], location[3]];
+  console.log(enabledBigBox);
+
+//   disableBigBoxes();
   checkIfBoxMade();
 }
 
+// Rn it disables the box its supposed to enable (intentionally), but I'll show you the issue over call
+// function disableBigBoxes() {
+//     for (let i = 0; i < ticTacToeNumber; i++) {
+//         for (let j = 0; j < ticTacToeNumber; j++) {
+//             if (i == enabledBigBox[0] && j == enabledBigBox[1]) {
+//                 for (let k = 0; k < ticTacToeNumber; k++) {
+//                     for (let l = 0; l < ticTacToeNumber; l++) {
+//                         tixTaxMatrixRender[i][j][k][l].disabled = true;
+//                     }
+//                 }
+//             }
+//         }
+//     }
+// }
+
 function checkIfBoxMade() {
-  // here we do the algorithm to check if smol box made
+  // here we do the algorithm to check if BIG boi box made
 }
 
 // console.log(tixTaxMatrixValue); // Now we log da matrix
