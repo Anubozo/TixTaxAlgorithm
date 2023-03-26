@@ -48,16 +48,18 @@ for (let i = 0; i < ticTacToeNumber; i++) {
 
 // The function to highlight the button when hovered
 function buttonOver() {
-  if (!turn) {
-    this.style.backgroundColor = "#E77471";
-  } else {
-    this.style.backgroundColor = "#85ADD9";
+  if(this.style.backgroundColor != "#E77471" && this.style.backgroundColor != "#85ADD9"){
+    if (!turn) {
+      this.style.backgroundColor = "#E77471";
+    } else {
+      this.style.backgroundColor = "#85ADD9";
+    }
   }
 }
 
 // The function to dishighlight? the button when not hovered
 function buttonOut() {
-  
+
   let location = this.id.slice(-4);
   let value =  tixTaxMatrixValue[location[0]][location[1]][location[2]][location[3]];
 
@@ -74,7 +76,7 @@ function buttonOut() {
 
 // Da function fo wen da user does da ting where they do da clik
 function clickidy() {
-  console.log("one of 'em did da clickin' on the box called " + this.id);
+  // console.log("one of 'em did da clickin' on the box called " + this.id);
   let location = this.id.slice(-4);
 
   if (turn) {
@@ -88,34 +90,16 @@ function clickidy() {
   turn = !turn;
 
   enabledBigBox = [location[2], location[3]];
-  console.log(enabledBigBox);
 
   //disableBigBoxes();
   checkIfBoxMade();
   updateRender(tixTaxMatrixValue);
 }
 
-// Rn it disables the box its supposed to enable (intentionally), but I'll show you the issue over call
-/*function disableBigBoxes() {
-  for (let i = 0; i < ticTacToeNumber; i++) {
-    for (let j = 0; j < ticTacToeNumber; j++) {
-      if (!(i == enabledBigBox[0] && j == enabledBigBox[1])) {
-        for (let k = 0; k < ticTacToeNumber; k++) {
-          for (let l = 0; l < ticTacToeNumber; l++) {
-            tixTaxMatrixRender[i][j][k][l].disabled = true;
-            //tixTaxMatrixRender[i][j][k][l].style.backgroundColor = "#000000";
-          }
-        }
-      }
-    }
-  }
-} */
-
 function checkIfBoxMade() {
   // here we do the algorithm to check if BIG boi box made
 }
 
-// console.log(tixTaxMatrixValue); // Now we log da matrix
 
 
 
@@ -127,9 +111,15 @@ function updateRender(matrixValue) {
     for(let j = 0; j < 3; j++){
       let miniRender =tixTaxMatrixRender[i][j];
       let miniValue = matrixValue[i][j];
+
+      if(enabledBigBox[1] == j && enabledBigBox[0] == i){
+        //tixTaxMatrixRender[i][j].backgroundColor == "#FF00FF";
+        console.log(tixTaxMatrixRender[i][j]);
+      }
+
+
       for (let k = 0; k < 3; k++) {
         for (let l = 0; l < 3; l++) {
-
 
           // Sets Whether Boxes are Disabled/Enabled
           miniRender[k][l].disabled = true;
