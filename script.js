@@ -2,7 +2,7 @@ const body = document.getElementById("body");
 const table = document.createElement("table");
 table.id = "bigBoiTable";
 body.appendChild(table);
-let turn = false;
+let turn = false; // I used boolean for turn cause it makes thinks a hell of a lot easier
 let enabledBigBox = "all";
 
 // Matrix to be rendered
@@ -78,24 +78,24 @@ function clickidy() {
   enabledBigBox = [location[2], location[3]];
   console.log(enabledBigBox);
 
-//   disableBigBoxes();
+  disableBigBoxes();
   checkIfBoxMade();
 }
 
 // Rn it disables the box its supposed to enable (intentionally), but I'll show you the issue over call
-// function disableBigBoxes() {
-//     for (let i = 0; i < ticTacToeNumber; i++) {
-//         for (let j = 0; j < ticTacToeNumber; j++) {
-//             if (i == enabledBigBox[0] && j == enabledBigBox[1]) {
-//                 for (let k = 0; k < ticTacToeNumber; k++) {
-//                     for (let l = 0; l < ticTacToeNumber; l++) {
-//                         tixTaxMatrixRender[i][j][k][l].disabled = true;
-//                     }
-//                 }
-//             }
-//         }
-//     }
-// }
+function disableBigBoxes() {
+    for (let i = 0; i < ticTacToeNumber; i++) {
+        for (let j = 0; j < ticTacToeNumber; j++) {
+            if (i == enabledBigBox[0] && j == enabledBigBox[1]) {
+                for (let k = 0; k < ticTacToeNumber; k++) {
+                    for (let l = 0; l < ticTacToeNumber; l++) {
+                        tixTaxMatrixRender[i][j][k][l].disabled = true;
+                    }
+                }
+            }
+        }
+    }
+}
 
 function checkIfBoxMade() {
   // here we do the algorithm to check if BIG boi box made

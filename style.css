@@ -30,7 +30,7 @@ button {
   cursor: pointer;
 }
 
-button:active {
+button:active:enabled {
   background-color: #4f4f4f;
   box-shadow: none;
   transform: translateY(2px);
