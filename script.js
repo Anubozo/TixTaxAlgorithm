@@ -86,10 +86,11 @@ function clickidy() {
 function disableBigBoxes() {
     for (let i = 0; i < ticTacToeNumber; i++) {
         for (let j = 0; j < ticTacToeNumber; j++) {
-            if (i == enabledBigBox[0] && j == enabledBigBox[1]) {
+            if (!(i == enabledBigBox[0] && j == enabledBigBox[1])) {
                 for (let k = 0; k < ticTacToeNumber; k++) {
                     for (let l = 0; l < ticTacToeNumber; l++) {
                         tixTaxMatrixRender[i][j][k][l].disabled = true;
+                        tixTaxMatrixRender[i][j][k][l].style.backgroundColor = "#000000";
                     }
                 }
             }
