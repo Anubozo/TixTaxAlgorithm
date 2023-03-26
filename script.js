@@ -48,7 +48,7 @@ for (let i = 0; i < ticTacToeNumber; i++) {
 
 // The function to highlight the button when hovered
 function buttonOver() {
-  if (turn) {
+  if (!turn) {
     this.style.backgroundColor = "#E77471";
   } else {
     this.style.backgroundColor = "#85ADD9";
@@ -57,7 +57,19 @@ function buttonOver() {
 
 // The function to dishighlight? the button when not hovered
 function buttonOut() {
-  this.style.backgroundColor = "#FFFFFF";
+  
+  let location = this.id.slice(-4);
+  let value =  tixTaxMatrixValue[location[0]][location[1]][location[2]][location[3]];
+
+  let color = "#FFFFFF";
+  if( value == "X"){
+    color = "#7295B9";
+  }else if(value == "O"){
+    color = "#AC5754";
+  }
+  this.style.backgroundColor = color;
+
+  
 }
 
 // Da function fo wen da user does da ting where they do da clik
@@ -78,28 +90,63 @@ function clickidy() {
   enabledBigBox = [location[2], location[3]];
   console.log(enabledBigBox);
 
-  disableBigBoxes();
+  //disableBigBoxes();
   checkIfBoxMade();
+  updateRender(tixTaxMatrixValue);
 }
 
 // Rn it disables the box its supposed to enable (intentionally), but I'll show you the issue over call
-function disableBigBoxes() {
-    for (let i = 0; i < ticTacToeNumber; i++) {
-        for (let j = 0; j < ticTacToeNumber; j++) {
-            if (!(i == enabledBigBox[0] && j == enabledBigBox[1])) {
-                for (let k = 0; k < ticTacToeNumber; k++) {
-                    for (let l = 0; l < ticTacToeNumber; l++) {
-                        tixTaxMatrixRender[i][j][k][l].disabled = true;
-                        tixTaxMatrixRender[i][j][k][l].style.backgroundColor = "#000000";
-                    }
-                }
-            }
+/*function disableBigBoxes() {
+  for (let i = 0; i < ticTacToeNumber; i++) {
+    for (let j = 0; j < ticTacToeNumber; j++) {
+      if (!(i == enabledBigBox[0] && j == enabledBigBox[1])) {
+        for (let k = 0; k < ticTacToeNumber; k++) {
+          for (let l = 0; l < ticTacToeNumber; l++) {
+            tixTaxMatrixRender[i][j][k][l].disabled = true;
+            //tixTaxMatrixRender[i][j][k][l].style.backgroundColor = "#000000";
+          }
         }
+      }
     }
-}
+  }
+} */
 
 function checkIfBoxMade() {
   // here we do the algorithm to check if BIG boi box made
 }
 
 // console.log(tixTaxMatrixValue); // Now we log da matrix
+
+
+
+
+function updateRender(matrixValue) {
+  // Matches TixTaxMatrix Render to tixTaxMatrixValue
+
+  for(let i = 0; i < 3; i++){
+    for(let j = 0; j < 3; j++){
+      let miniRender =tixTaxMatrixRender[i][j];
+      let miniValue = matrixValue[i][j];
+      for (let k = 0; k < 3; k++) {
+        for (let l = 0; l < 3; l++) {
+
+
+          // Sets Whether Boxes are Disabled/Enabled
+          miniRender[k][l].disabled = true;
+          if(enabledBigBox[1] == j && enabledBigBox[0] == i){
+            miniRender[k][l].disabled = false;
+          }
+
+          if(miniValue[k][l] == 'O'){
+            miniRender[k][l].style.backgroundColor = "#E77471";
+          } else if(miniValue[k][l] == 'X'){
+            miniRender[k][l].style.backgroundColor = "#85ADD9";
+          } else {
+            miniRender[k][l].style.backgroundColor = "#FFFFFF";
+          }
+        }
+      }
+
+    }
+  }
+}
