@@ -3,7 +3,7 @@ const table = document.createElement("table");
 table.id = "bigBoiTable";
 body.appendChild(table);
 let turn = false; // False = Red, True = Blue
-let enabledBigBox = "all";
+let enabledBigBox = ["all","all"];
 let wholeGameStatus = "";
 let blue = "#85ADD9";
 let red = "#E77471";
@@ -106,11 +106,12 @@ function clickidy() {
   ]);
   wholeGameStatus = checkIfBoxMade(bigBoardStatus);
   console.log(wholeGameStatus); // Check if whole game ended
+
+  updateRender(tixTaxMatrixValue);
   if (wholeGameStatus != "") {
     console.log("Game Ended!!!! Won: " + wholeGameStatus); // Check if whole game ended
     endGame();
   }
-  updateRender(tixTaxMatrixValue);
 }
 
 function endGame() {
@@ -203,28 +204,7 @@ function checkIfBoxMade(board) {
 
 // Matches TixTaxMatrix Render to tixTaxMatrixValue
 function updateRender(matrixValue) {
-  // Any board rule
-  if (bigBoardStatus[enabledBigBox[0]][enabledBigBox[1]] != "") {
-    console.log("all");
-    console.log(bigBoardStatus);
-    enabledBigBox = "all";
-    for (let i = 0; i < 3; i++) {
-      for (let j = 0; j < 3; j++) {
-        let miniRender = tixTaxMatrixRender[i][j];
-        for (let k = 0; k < 3; k++) {
-          for (let l = 0; l < 3; l++) {
-            miniRender[k][l].disabled = true;
-            if (
-              tixTaxMatrixValue[i][j][k][l] == "" &&
-              bigBoardStatus[i][j] == ""
-            ) {
-              miniRender[k][l].disabled = false;
-            }
-          }
-        }
-      }
-    }
-  }
+
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
       let miniRender = tixTaxMatrixRender[i][j];
@@ -257,5 +237,28 @@ function updateRender(matrixValue) {
         }
       }
     }
+
+  // Any board rule
+  if (bigBoardStatus[enabledBigBox[0]][enabledBigBox[1]] != "") {
+    console.log("all");
+    console.log(bigBoardStatus);
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        let miniRender = tixTaxMatrixRender[i][j];
+        for (let k = 0; k < 3; k++) {
+          for (let l = 0; l < 3; l++) {
+            miniRender[k][l].disabled = true;
+            if (
+              tixTaxMatrixValue[i][j][k][l] === '' &&
+              bigBoardStatus[i][j] === ''
+            ) {
+              miniRender[k][l].disabled = false;
+            }
+          }
+        }
+      }
+    }
+  }
+
   }
 }
