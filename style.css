@@ -16,6 +16,7 @@
 
 button {
   background-color: #ffffff;
+  opacity:1;
   border: none;
   border-radius: 10px;
   color: #ffffff;
@@ -37,5 +38,5 @@ button:active:enabled {
 }
 
 button[disabled] {
-    /*background-color: #000000;*/
+    background-color: #000000;
 }

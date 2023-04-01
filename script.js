@@ -7,7 +7,7 @@ let enabledBigBox = ["all","all"];
 let wholeGameStatus = "";
 let blue = "#85ADD9";
 let red = "#E77471";
-
+let disabledBoards = [];
 let tixTaxMatrixRender = [];
 let tixTaxMatrixValue = [];
 let bigBoardStatus = [
@@ -26,6 +26,8 @@ for (let i = 0; i < 3; i++) {
     tixTaxMatrixRender[i][j] = [[], [], []];
     tixTaxMatrixValue[i][j] = [[], [], []];
     const bigBox = document.createElement("table");
+    bigBox.classList="miniTable";
+    bigBox.id = "miniTable"+i+j;
     const bigBoxCell = document.createElement("td"); // This is the table data cell to contain this BIG boi boxes
     bigBoxCell.id = "bigBox" + i + j;
     bigBoxCell.className = "bigBox";
@@ -48,6 +50,9 @@ for (let i = 0; i < 3; i++) {
     }
   }
 }
+
+let miniTables = document.getElementsByClassName("miniTable");
+
 
 // The function to highlight the button when hovered
 function buttonOver() {
@@ -205,13 +210,16 @@ function checkIfBoxMade(board) {
 // Matches TixTaxMatrix Render to tixTaxMatrixValue
 function updateRender(matrixValue) {
 
+  disabledBoards = [];
+
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
       let miniRender = tixTaxMatrixRender[i][j];
       let miniValue = matrixValue[i][j];
-
       if (enabledBigBox[1] == j && enabledBigBox[0] == i) {
         console.log(tixTaxMatrixRender[i][j]);
+      } else {
+        disabledBoards.push(3*i+j);
       }
 
       for (let k = 0; k < 3; k++) {
@@ -226,7 +234,6 @@ function updateRender(matrixValue) {
           ) {
             miniRender[k][l].disabled = false;
           }
-
           if (miniValue[k][l] == "R") {
             miniRender[k][l].style.backgroundColor = red;
           } else if (miniValue[k][l] == "B") {
@@ -237,28 +244,56 @@ function updateRender(matrixValue) {
         }
       }
     }
-
+  }
   // Any board rule
   if (bigBoardStatus[enabledBigBox[0]][enabledBigBox[1]] != "") {
-    console.log("all");
+    disabledBoards = [];
     console.log(bigBoardStatus);
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
         let miniRender = tixTaxMatrixRender[i][j];
+
+        if( bigBoardStatus[i][j] !== ''){
+          disabledBoards.push(3*i+j);
+        }
+
         for (let k = 0; k < 3; k++) {
           for (let l = 0; l < 3; l++) {
             miniRender[k][l].disabled = true;
+            
             if (
               tixTaxMatrixValue[i][j][k][l] === '' &&
               bigBoardStatus[i][j] === ''
             ) {
+
               miniRender[k][l].disabled = false;
             }
           }
         }
       }
     }
-  }
 
   }
+  colorBoards();
+
 }
+
+// Colors Backgrounds of Enabled Boards
+function colorBoards(){
+
+  for(let i = 0; i < miniTables.length; i++){
+    let miniTable = miniTables[i];
+    if(disabledBoards.includes(i)){
+      miniTable.style = "background-color: #FFFFFF";
+    } else {
+      if(!turn){
+        miniTable.style = "background-color: rgba(231,116,113,0.4)";
+      } else {
+        miniTable.style = "background-color: rgba(133,173,217,0.4)";
+      }
+
+    }
+    
+  }
+}
+
