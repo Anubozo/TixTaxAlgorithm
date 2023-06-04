@@ -1,3 +1,5 @@
+import { randomPicker } from "./minimax.js";
+
 const body = document.getElementById("body");
 const table = document.createElement("table");
 table.id = "bigBoiTable";
@@ -10,6 +12,7 @@ let red = "#E77471";
 let disabledBoards = [];
 let tixTaxMatrixRender = [];
 let tixTaxMatrixValue = [];
+let playableCells = [];
 let bigBoardStatus = [
   ["", "", ""],
   ["", "", ""],
@@ -20,11 +23,13 @@ let bigBoardStatus = [
 for (let i = 0; i < 3; i++) {
   tixTaxMatrixRender[i] = [[], [], []];
   tixTaxMatrixValue[i] = [[], [], []];
+  playableCells[i] = [[], [], []];
   const bigRow = document.createElement("tr"); // The BIG boi roes
   table.appendChild(bigRow); // BIG boi roes appended on!!!
   for (let j = 0; j < 3; j++) {
     tixTaxMatrixRender[i][j] = [[], [], []];
     tixTaxMatrixValue[i][j] = [[], [], []];
+    playableCells[i][j] = [[], [], []];
     const bigBox = document.createElement("table");
     bigBox.classList="miniTable";
     bigBox.id = "miniTable"+i+j;
@@ -38,6 +43,7 @@ for (let i = 0; i < 3; i++) {
       bigBox.appendChild(smallRow);
       tixTaxMatrixRender[i][j][k] = [[], [], []];
       tixTaxMatrixValue[i][j][k] = ["", "", ""];
+      playableCells[i][j][k] = ["", "", ""];
       for (let l = 0; l < 3; l++) {
         const btn = document.createElement("button");
         btn.id = "box" + i + j + k + l;
@@ -50,7 +56,6 @@ for (let i = 0; i < 3; i++) {
     }
   }
 }
-
 let miniTables = document.getElementsByClassName("miniTable");
 
 
@@ -116,6 +121,25 @@ function clickidy() {
   if (wholeGameStatus != "") {
     console.log("Game Ended!!!! Won: " + wholeGameStatus); // Check if whole game ended
     endGame();
+  }
+
+  // Check playable cells
+  for (let i = 0; i < tixTaxMatrixRender.length; i++) {
+    for (let j = 0; j < tixTaxMatrixRender[i].length; j++) {
+      for (let k = 0; k < tixTaxMatrixRender[i][j].length; k++) {
+        for (let l = 0; l < tixTaxMatrixRender[i][j][k].length; l++) {
+          if (tixTaxMatrixRender[i][j][k][l].disabled) {
+            playableCells[i][j][k][l] = "0"; // Cells that are not playable are set to 0
+          } else {
+            playableCells[i][j][k][l] = "1"; // Cells that are playable are set to 1
+          }
+        }
+      }
+    }
+  }
+  
+  if (turn) {
+    randomPicker(playableCells, tixTaxMatrixRender);
   }
 }
 
@@ -272,28 +296,23 @@ function updateRender(matrixValue) {
         }
       }
     }
-
   }
   colorBoards();
-
 }
 
 // Colors Backgrounds of Enabled Boards
 function colorBoards(){
-
   for(let i = 0; i < miniTables.length; i++){
     let miniTable = miniTables[i];
     if(disabledBoards.includes(i)){
       miniTable.style = "background-color: #FFFFFF";
     } else {
       if(!turn){
-        miniTable.style = "background-color: rgba(231,116,113,0.4)";
+        miniTable.style = "background-color: rgba(231,116,113,0.4)"; // Red
       } else {
-        miniTable.style = "background-color: rgba(133,173,217,0.4)";
+        miniTable.style = "background-color: rgba(133,173,217,0.4)"; // Blue
       }
-
     }
-    
   }
 }
 
