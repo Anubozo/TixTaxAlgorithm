@@ -13,5 +13,6 @@ export function randomPicker(playableCells, tixTaxMatrixRender) {
 
     console.log("picked box" + i + j + k + l);
 
+    tixTaxMatrixRender[i][j][k][l].disabled = false;
     tixTaxMatrixRender[i][j][k][l].click();
 }

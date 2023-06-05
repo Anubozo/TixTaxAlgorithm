@@ -114,15 +114,18 @@ function clickidy() {
     location[1],
     bigBoardStatus[location[0]][location[1]],
   ]);
+  
+  updateRender(tixTaxMatrixValue);
+  
   wholeGameStatus = checkIfBoxMade(bigBoardStatus);
   console.log(wholeGameStatus); // Check if whole game ended
-
-  updateRender(tixTaxMatrixValue);
+  
   if (wholeGameStatus != "") {
     console.log("Game Ended!!!! Won: " + wholeGameStatus); // Check if whole game ended
     endGame();
+    return 0;
   }
-
+  
   // Check playable cells
   for (let i = 0; i < tixTaxMatrixRender.length; i++) {
     for (let j = 0; j < tixTaxMatrixRender[i].length; j++) {
@@ -137,9 +140,18 @@ function clickidy() {
       }
     }
   }
-  
+
   if (turn) {
-    randomPicker(playableCells, tixTaxMatrixRender);
+    for (let i = 0; i < tixTaxMatrixRender.length; i++) {
+      for (let j = 0; j < tixTaxMatrixRender[i].length; j++) {
+        for (let k = 0; k < tixTaxMatrixRender[i][j].length; k++) {
+          for (let l = 0; l < tixTaxMatrixRender[i][j][k].length; l++) {
+            tixTaxMatrixRender[i][j][k][l].disabled = true;
+          }
+        }
+      }
+    }
+    setTimeout(() => {randomPicker(playableCells, tixTaxMatrixRender)}, 2000);
   }
 }
 
@@ -149,9 +161,19 @@ function endGame() {
       for (let k = 0; k < tixTaxMatrixRender[i][j].length; k++) {
         for (let l = 0; l < tixTaxMatrixRender[i][j][k].length; l++) {
           tixTaxMatrixRender[i][j][k][l].disabled = true;
+          if (wholeGameStatus == "R") {
+            tixTaxMatrixRender[i][j][k][l].backgroundColor = red;
+          } else if (wholeGameStatus == "B") {
+            tixTaxMatrixRender[i][j][k][l].backgroundColor = blue;
+          } else if (wholeGameStatus == "D") {
+            tixTaxMatrixRender[i][j][k][l].backgroundColor = "#A020F0";
+          }
         }
       }
     }
+  }
+  for (let i = 0; i < miniTables.length; i++) {
+    miniTables[i].backgroundColor = "#FFFFFF";
   }
 }
 
@@ -303,14 +325,13 @@ function updateRender(matrixValue) {
 // Colors Backgrounds of Enabled Boards
 function colorBoards(){
   for(let i = 0; i < miniTables.length; i++){
-    let miniTable = miniTables[i];
     if(disabledBoards.includes(i)){
-      miniTable.style = "background-color: #FFFFFF";
+      miniTables[i].style = "background-color: #FFFFFF";
     } else {
       if(!turn){
-        miniTable.style = "background-color: rgba(231,116,113,0.4)"; // Red
+        miniTables[i].style = "background-color: rgba(231,116,113,0.4)"; // Red
       } else {
-        miniTable.style = "background-color: rgba(133,173,217,0.4)"; // Blue
+        miniTables[i].style = "background-color: rgba(133,173,217,0.4)"; // Blue
       }
     }
   }
