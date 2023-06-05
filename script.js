@@ -4,7 +4,7 @@ const body = document.getElementById("body");
 const table = document.createElement("table");
 table.id = "bigBoiTable";
 body.appendChild(table);
-let turn = false; // False = Red, True = Blue
+let turn = false; // False = Red, True = Blue/AI
 let enabledBigBox = ["all","all"];
 let wholeGameStatus = "";
 let blue = "#85ADD9";
@@ -151,7 +151,7 @@ function clickidy() {
         }
       }
     }
-    setTimeout(() => {randomPicker(playableCells, tixTaxMatrixRender)}, 2000);
+    setTimeout(() => { randomPicker(playableCells, tixTaxMatrixRender, ...tixTaxMatrixValue) }, 2000);
   }
 }
 
@@ -177,7 +177,7 @@ function endGame() {
   }
 }
 
-function checkIfBoxMade(board) {
+export function checkIfBoxMade(board) {
   let boardStatus = ["D", "R", "B", ""];
   const winningCombos = [
     [
