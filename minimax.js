@@ -29,28 +29,30 @@ export function minimax(board, depth, isAI) {
 
     if (isAI) {
         let maxEvaluation = -Infinity;
-        for (let i = 0; i < board[2]; i++) {
-            newBoard = [];
-            let evaluation = minimax([newBoard, board[2][i], ], depth - 1, !isAI);
+        for (let i = 0; i < board[2].length; i++) {
+            let newBoard = JSON.parse(JSON.stringify(board[0]));
+            newBoard[board[2][i][0]][board[2][i][1]][board[2][i][2]][board[2][i][3]] = "B";
+            let evaluation = minimax([newBoard, board[2][i], checkPlayableMoves(newBoard, board[2][i])], depth - 1, !isAI);
             maxEvaluation = Math.max(maxEvaluation, evaluation);
         }
         return maxEvaluation;
     } else {
         let minEvaluation = Infinity;
-        for (let i = 0; i < board[2]; i++) {
+        for (let i = 0; i < board[2].length; i++) {
+            let newBoard = JSON.parse(JSON.stringify(board[0]));
+            newBoard[board[2][i][0]][board[2][i][1]][board[2][i][2]][board[2][i][3]] = "R";
             let evaluation = minimax(newBoard, depth - 1, !isAI);
             minEvaluation = Math.min(minEvaluation, evaluation);
         }
         return minEvaluation;
     }
-
 }
 
 function evaluate(board) {
     return 0;
 }
 
-// Dunno if it works cause idk if works
+// Dunno if it works cause idk how to test it
 function checkPlayableMoves(currentBoard, lastPlayedMove) {
     let playableMoves = [];
     if (checkIfBoxMade(currentBoard[lastPlayedMove[2]][lastPlayedMove[3]]) == "") {
