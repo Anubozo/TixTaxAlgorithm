@@ -151,7 +151,7 @@ function clickidy() {
         }
       }
     }
-    setTimeout(() => { randomPicker(playableCells, tixTaxMatrixRender, ...tixTaxMatrixValue) }, 2000);
+    setTimeout(() => { randomPicker(playableCells, tixTaxMatrixRender, ...tixTaxMatrixValue) }, 10);
   }
 }
 
@@ -181,44 +181,28 @@ export function checkIfBoxMade(board) {
   let boardStatus = ["D", "R", "B", ""];
   const winningCombos = [
     [
-      [0, 0],
-      [0, 1],
-      [0, 2],
+      [0, 0], [0, 1], [0, 2], // Horizontal 1
     ],
     [
-      [1, 0],
-      [1, 1],
-      [1, 2],
+      [1, 0], [1, 1], [1, 2], // Horizontal 2
     ],
     [
-      [2, 0],
-      [2, 1],
-      [2, 2],
+      [2, 0], [2, 1], [2, 2], // Horizontal 3
     ],
     [
-      [0, 0],
-      [1, 0],
-      [2, 0],
+      [0, 0], [1, 0], [2, 0], // Vertical 1
     ],
     [
-      [0, 1],
-      [1, 1],
-      [2, 1],
+      [0, 1], [1, 1], [2, 1], // Vertical 2
     ],
     [
-      [0, 2],
-      [1, 2],
-      [2, 2],
+      [0, 2], [1, 2], [2, 2], // Vertical 3
     ],
     [
-      [0, 0],
-      [1, 1],
-      [2, 2],
+      [0, 0], [1, 1], [2, 2], // Diagonal 1
     ],
     [
-      [0, 2],
-      [1, 1],
-      [2, 0],
+      [0, 2], [1, 1], [2, 0], // Diagonal 2
     ],
   ];
 
