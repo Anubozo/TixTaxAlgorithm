@@ -145,16 +145,17 @@ function numericBoardEvaluation(numericBoard){ // AI is positive
     for(let i = 0; i < advantageCombos.length; i++){ // 0 - 8
         let comboEvaluation = 0;
         for(let j = 0; j < advantageCombos[0].length; j++){ // 0 - 2
-            let comboEvaluation = numericBoard[advantageCombos[i][j][0]][advantageCombos[i][j][1]];
+            comboEvaluation += numericBoard[advantageCombos[i][j][0]][advantageCombos[i][j][1]];
         }
+
         if(almostWon[0] == true && almostWon[1] == true){
             return 0;
         }
 
-        if(advantage == 2){
+        if(comboEvaluation == 2){
             almostWon[0] = true;
         }
-        if(advantage == -2){
+        if(comboEvaluation == -2){
             almostWon[1] = true;
         }
 
