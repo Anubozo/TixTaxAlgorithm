@@ -338,6 +338,6 @@ export function checkPlayableMoves(currentBoard, lastPlayedMove) {
             }
         }
     }
-    
+    console.log("PLAYABLE MOVES: ", playableMoves);
     return playableMoves;
 }
