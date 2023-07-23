@@ -120,7 +120,6 @@ export function minimax(board, depth, isAI) {
 
 // The evaluator function
 function numericBoardEvaluation(numericBoard){ // AI is positive
-
     // Check if game has ended
     for (let i = 0; i < advantageCombos.length; i++) {
         const combo = advantageCombos[i];
@@ -139,14 +138,17 @@ function numericBoardEvaluation(numericBoard){ // AI is positive
     }
 
     // Evaluate from advantage combos
-    let advantageWeights = [0, 3, 10]; // Change these values to adjust how much the model values almost completing a 3-in-a-row
+    // let advantageWeights = [0, 3, 10]; // Change these values to adjust how much the model values almost completing a 3-in-a-row
     let advantage = 0;
     let almostWon = [false, false]; // AI, Human
     for(let i = 0; i < advantageCombos.length; i++){ // 0 - 8
+        const combo = advantageCombos[i];
+        const [a, b, c] = combo;
+
         let comboEvaluation = 0;
-        for(let j = 0; j < advantageCombos[0].length; j++){ // 0 - 2
-            comboEvaluation += numericBoard[advantageCombos[i][j][0]][advantageCombos[i][j][1]];
-        }
+
+        comboEvaluation += numericBoard[a[0]][a[1]] + numericBoard[b[0]][b[1]] + numericBoard[c[0]][c[1]];
+        
 
         if(almostWon[0] == true && almostWon[1] == true){
             return 0;
@@ -161,20 +163,85 @@ function numericBoardEvaluation(numericBoard){ // AI is positive
 
         advantage += comboEvaluation;
     }
-
-    return advantage;
+    return advantage/8;
 
 }
 
 function evaluate(board, isAI) {
-    let evaluation = 0;
     
-    // If it's the AI's turn +1 advantage or else -1 advantage
+    let evaluation = 0;
+    let bigNumericBoard = [
+        [
+            [
+                [0,0,0],[0,0,0],[0,0,0]
+            ],
+            [
+                [0,0,0],[0,0,0],[0,0,0]
+            ],
+            [
+                [0,0,0],[0,0,0],[0,0,0]
+            ]
+        ],[
+            [
+                [0,0,0],[0,0,0],[0,0,0]
+            ],
+            [
+                [0,0,0],[0,0,0],[0,0,0]
+            ],
+            [
+                [0,0,0],[0,0,0],[0,0,0]
+            ]
+        ],[
+            [
+                [0,0,0],[0,0,0],[0,0,0]
+            ],
+            [
+                [0,0,0],[0,0,0],[0,0,0]
+            ],
+            [
+                [0,0,0],[0,0,0],[0,0,0]
+            ]
+        ]
+    ];
+    let evaluatedBoard = [ 
+        [0,0,0],[0,0,0],[0,0,0]
+    ];
+    for (let i = 0; i < board[0].length; i++) {
+        for (let j = 0; j < board[0][0].length; j++) {
+            for (let k = 0; k < board[0][0][0].length; k++) {
+                for (let l = 0; l < board[0][0][0][0].length; l++) {
+                    //console.log(bigNumericBoard[i][j][k][l],board[0][i][j][k][l]);
+                    if(board[0][i][j][k][l] === "R"){
+                        bigNumericBoard[i][j][j][l] = -1;
+                    } else if (board[0][i][j][k][l] === "B"){
+                        bigNumericBoard[i][j][k][l] = 1;
+                    }
+                }
+            }
+        }
+    }
+
+    //console.log(bigNumericBoard);
+
+    for (let i = 0; i < bigNumericBoard.length; i++) {
+        for (let j = 0; j < bigNumericBoard[i].length; j++) {
+            evaluatedBoard[i][j] = numericBoardEvaluation(bigNumericBoard[i][j]);
+            
+        }
+    }
+    
+
+    //console.log(evaluatedBoard);
+
+    evaluation = numericBoardEvaluation(evaluatedBoard);
+
+    console.log(evaluation);
+    /* If it's the AI's turn +1 advantage or else -1 advantage
     if (isAI) {
         evaluation += 1;
     } else {
         evaluation -= 1;
-    }
+    }*/
 
     
     // const advantageCombos = [
