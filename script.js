@@ -1,11 +1,11 @@
-import { randomPicker } from "./minimax.js";
+import { minimax, checkPlayableMoves, randomPicker } from "./minimax.js";
 
 const body = document.getElementById("body");
 const table = document.createElement("table");
 table.id = "bigBoiTable";
 body.appendChild(table);
 let turn = false; // False = Red, True = Blue/AI
-let enabledBigBox = ["all","all"];
+let enabledBigBox = ["all", "all"];
 let wholeGameStatus = "";
 let blue = "#85ADD9";
 let red = "#E77471";
@@ -31,8 +31,8 @@ for (let i = 0; i < 3; i++) {
     tixTaxMatrixValue[i][j] = [[], [], []];
     playableCells[i][j] = [[], [], []];
     const bigBox = document.createElement("table");
-    bigBox.classList="miniTable";
-    bigBox.id = "miniTable"+i+j;
+    bigBox.classList = "miniTable";
+    bigBox.id = "miniTable" + i + j;
     const bigBoxCell = document.createElement("td"); // This is the table data cell to contain this BIG boi boxes
     bigBoxCell.id = "bigBox" + i + j;
     bigBoxCell.className = "bigBox";
@@ -56,8 +56,8 @@ for (let i = 0; i < 3; i++) {
     }
   }
 }
-let miniTables = document.getElementsByClassName("miniTable");
 
+let miniTables = document.getElementsByClassName("miniTable");
 
 // The function to highlight the button when hovered
 function buttonOver() {
@@ -109,23 +109,27 @@ function clickidy() {
     // Check if small board made
     tixTaxMatrixValue[location[0]][location[1]]
   );
-  console.table([
-    location[0],
-    location[1],
-    bigBoardStatus[location[0]][location[1]],
-  ]);
-  
+  if (bigBoardStatus[location[0]][location[1]] != "") {
+    console.table([
+      location[0],
+      location[1],
+      bigBoardStatus[location[0]][location[1]],
+    ]);
+  }
+
   updateRender(tixTaxMatrixValue);
-  
+
   wholeGameStatus = checkIfBoxMade(bigBoardStatus);
-  console.log(wholeGameStatus); // Check if whole game ended
-  
+  if (wholeGameStatus != "") {
+    console.log(wholeGameStatus); // Check if whole game ended
+  }
+
   if (wholeGameStatus != "") {
     console.log("Game Ended!!!! Won: " + wholeGameStatus); // Check if whole game ended
     endGame();
     return 0;
   }
-  
+
   // Check playable cells
   for (let i = 0; i < tixTaxMatrixRender.length; i++) {
     for (let j = 0; j < tixTaxMatrixRender[i].length; j++) {
@@ -151,7 +155,12 @@ function clickidy() {
         }
       }
     }
-    setTimeout(() => { randomPicker(playableCells, tixTaxMatrixRender, ...tixTaxMatrixValue) }, 10);
+    
+    // Calling the random picker
+    // setTimeout(() => { randomPicker(playableCells, tixTaxMatrixRender, tixTaxMatrixValue, location) }, 10);
+
+    // Calling the minimax algorithm (I'm a literal genius)
+    console.log("Evaluation: " + minimax([structuredClone(tixTaxMatrixValue), location, checkPlayableMoves(structuredClone(tixTaxMatrixValue), location)], 4, true));
   }
 }
 
@@ -249,7 +258,7 @@ function updateRender(matrixValue) {
       if (enabledBigBox[1] == j && enabledBigBox[0] == i) {
         console.log(tixTaxMatrixRender[i][j]);
       } else {
-        disabledBoards.push(3*i+j);
+        disabledBoards.push(3 * i + j);
       }
 
       for (let k = 0; k < 3; k++) {
@@ -283,14 +292,14 @@ function updateRender(matrixValue) {
       for (let j = 0; j < 3; j++) {
         let miniRender = tixTaxMatrixRender[i][j];
 
-        if( bigBoardStatus[i][j] !== ''){
-          disabledBoards.push(3*i+j);
+        if (bigBoardStatus[i][j] !== '') {
+          disabledBoards.push(3 * i + j);
         }
 
         for (let k = 0; k < 3; k++) {
           for (let l = 0; l < 3; l++) {
             miniRender[k][l].disabled = true;
-            
+
             if (
               tixTaxMatrixValue[i][j][k][l] === '' &&
               bigBoardStatus[i][j] === ''
@@ -307,12 +316,12 @@ function updateRender(matrixValue) {
 }
 
 // Colors Backgrounds of Enabled Boards
-function colorBoards(){
-  for(let i = 0; i < miniTables.length; i++){
-    if(disabledBoards.includes(i)){
+function colorBoards() {
+  for (let i = 0; i < miniTables.length; i++) {
+    if (disabledBoards.includes(i)) {
       miniTables[i].style = "background-color: #FFFFFF";
     } else {
-      if(!turn){
+      if (!turn) {
         miniTables[i].style = "background-color: rgba(231,116,113,0.4)"; // Red
       } else {
         miniTables[i].style = "background-color: rgba(133,173,217,0.4)"; // Blue
