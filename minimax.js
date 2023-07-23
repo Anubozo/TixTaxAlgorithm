@@ -95,15 +95,14 @@ export function minimax(board, depth, isAI) {
             // Call the minimax function with this new board, the last played move being the current next playable move, the new next playable moves, the depth as 1 less than before, and the other player's turn
             let evaluation = minimax([newBoard, board[2][i], checkPlayableMoves(newBoard, board[2][i])], depth - 1, !isAI);
             // Check to see whether this evaluation is the maximum
-            if(maxEvaluation >= evaluation){
+            if(evaluation >= maxEvaluation){
                 bestMove = [board[2][i][0], board[2][i][1], board[2][i][2], board[2][i][3]];
-                console.log("EVALUATION + MOVE" + maxEvaluation + " | " + bestMove);
             }
             maxEvaluation = Math.max(maxEvaluation, evaluation);
+            console.log("EVALUATION + MOVE: " + maxEvaluation + " | " + bestMove, newBoard);
         }
         console.log("AI turn: max eval: " + maxEvaluation);
         algorithmThinking.push(board);
-        console.log(bestMove);
         return maxEvaluation;
     } else {
         let minEvaluation = Infinity;
@@ -118,11 +117,11 @@ export function minimax(board, depth, isAI) {
             // Call the minimax function with this new board, the last played move being the current next playable move, the new next playable moves, the depth as 1 less than before, and the other player's turn
             let evaluation = minimax([newBoard, nextMove, checkPlayableMoves(newBoard, nextMove)], depth - 1, !isAI);
             // Check to see whether this evaluation is the minimum
-            if(minEvaluation <= evaluation){
+            if(evaluation <= minEvaluation){
                 bestMove = [nextMove[0],nextMove[1],nextMove[2],nextMove[3]];
-                console.log("EVALUATION + MOVE" + minEvaluation + " | " +bestMove);
             }
             minEvaluation = Math.min(minEvaluation, evaluation);
+            console.log("EVALUATION + MOVE" + minEvaluation + " | " +bestMove, newBoard);
         }
         console.log("Human turn: min eval: " + minEvaluation);
         algorithmThinking.push(board);
@@ -177,7 +176,7 @@ function numericBoardEvaluation(numericBoard){ // AI is positive
     }
 
     
-    return advantage/15; // ADJUST THIS NUMBER BY TALKING TO ANUBHAV ABOUT IT
+    return advantage/8; // ADJUST THIS NUMBER BY TALKING TO ANUBHAV ABOUT IT
 
 }
 
@@ -244,8 +243,6 @@ function evaluate(board, isAI) {
     }
     
     evaluation = numericBoardEvaluation(evaluatedBoard);
-
-    console.log(evaluatedBoard);
 
     /* If it's the AI's turn +1 advantage or else -1 advantage
     if (isAI) {

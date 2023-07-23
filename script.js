@@ -173,6 +173,7 @@ function clickidy() {
     // Calling the minimax algorithm (I'm a literal genius)
     const movesNum = 3; // The number of moves to predict into the future
     console.log("Evaluation: " + minimax([structuredClone(tixTaxMatrixValue), location, checkPlayableMoves(structuredClone(tixTaxMatrixValue), location)], movesNum, true));
+    console.log(giveBest());
     let bestMove = giveBest();
     tixTaxMatrixRender[bestMove[0]][bestMove[1]][bestMove[2]][bestMove[3]].disabled = false;
     tixTaxMatrixRender[bestMove[0]][bestMove[1]][bestMove[2]][bestMove[3]].click();
@@ -180,7 +181,7 @@ function clickidy() {
     // Seeing the algorithm's thinking
     let algorithmThinking = getAlgorithmThinking();
     localStorage["algorithmThinking"] = JSON.stringify(algorithmThinking);
-    window.open("./futureGames.html");
+    //window.open("./futureGames.html");
   }
 }
 
