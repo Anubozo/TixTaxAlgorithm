@@ -55,7 +55,10 @@ export function randomPicker(playableCells, tixTaxMatrixRender, currentBoard, la
 
 // Blue = AI = True = Maximizer
 // board = [currentBoard, lastPlayedMove, nextPlayableMoves]
-// Need to write the evaluate function
+var bestMove = [-1,-1,-1,-1];
+export function giveBest(){
+    return bestMove;
+}
 export function minimax(board, depth, isAI) {
     // Checking whole game status
     let bigBoardStatus = [
@@ -77,8 +80,8 @@ export function minimax(board, depth, isAI) {
         return evaluate(board, isAI);
     }
 
-    console.log("Depth: " + depth);
-    console.log("Last Played Move: " + board[1]);
+    // console.log("Depth: " + depth);
+    // console.log("Last Played Move: " + board[1]);
 
     // If it's the AI's turn
     if (isAI) {
@@ -92,10 +95,15 @@ export function minimax(board, depth, isAI) {
             // Call the minimax function with this new board, the last played move being the current next playable move, the new next playable moves, the depth as 1 less than before, and the other player's turn
             let evaluation = minimax([newBoard, board[2][i], checkPlayableMoves(newBoard, board[2][i])], depth - 1, !isAI);
             // Check to see whether this evaluation is the maximum
+            if(maxEvaluation >= evaluation){
+                bestMove = [board[2][i][0], board[2][i][1], board[2][i][2], board[2][i][3]];
+                console.log("EVALUATION + MOVE" + maxEvaluation + " | " + bestMove);
+            }
             maxEvaluation = Math.max(maxEvaluation, evaluation);
         }
         console.log("AI turn: max eval: " + maxEvaluation);
         algorithmThinking.push(board);
+        console.log(bestMove);
         return maxEvaluation;
     } else {
         let minEvaluation = Infinity;
@@ -110,6 +118,10 @@ export function minimax(board, depth, isAI) {
             // Call the minimax function with this new board, the last played move being the current next playable move, the new next playable moves, the depth as 1 less than before, and the other player's turn
             let evaluation = minimax([newBoard, nextMove, checkPlayableMoves(newBoard, nextMove)], depth - 1, !isAI);
             // Check to see whether this evaluation is the minimum
+            if(minEvaluation <= evaluation){
+                bestMove = [nextMove[0],nextMove[1],nextMove[2],nextMove[3]];
+                console.log("EVALUATION + MOVE" + minEvaluation + " | " +bestMove);
+            }
             minEvaluation = Math.min(minEvaluation, evaluation);
         }
         console.log("Human turn: min eval: " + minEvaluation);
@@ -163,13 +175,17 @@ function numericBoardEvaluation(numericBoard){ // AI is positive
 
         advantage += comboEvaluation;
     }
-    return advantage/8;
+
+    
+    return advantage/15; // ADJUST THIS NUMBER BY TALKING TO ANUBHAV ABOUT IT
 
 }
 
 function evaluate(board, isAI) {
     
     let evaluation = 0;
+
+    // It doesn't let you edit values of an array if it's cloned properly
     let bigNumericBoard = [
         [
             [
@@ -210,7 +226,6 @@ function evaluate(board, isAI) {
         for (let j = 0; j < board[0][0].length; j++) {
             for (let k = 0; k < board[0][0][0].length; k++) {
                 for (let l = 0; l < board[0][0][0][0].length; l++) {
-                    //console.log(bigNumericBoard[i][j][k][l],board[0][i][j][k][l]);
                     if(board[0][i][j][k][l] === "R"){
                         bigNumericBoard[i][j][j][l] = -1;
                     } else if (board[0][i][j][k][l] === "B"){
@@ -221,8 +236,6 @@ function evaluate(board, isAI) {
         }
     }
 
-    //console.log(bigNumericBoard);
-
     for (let i = 0; i < bigNumericBoard.length; i++) {
         for (let j = 0; j < bigNumericBoard[i].length; j++) {
             evaluatedBoard[i][j] = numericBoardEvaluation(bigNumericBoard[i][j]);
@@ -230,12 +243,10 @@ function evaluate(board, isAI) {
         }
     }
     
-
-    //console.log(evaluatedBoard);
-
     evaluation = numericBoardEvaluation(evaluatedBoard);
 
-    console.log(evaluation);
+    console.log(evaluatedBoard);
+
     /* If it's the AI's turn +1 advantage or else -1 advantage
     if (isAI) {
         evaluation += 1;

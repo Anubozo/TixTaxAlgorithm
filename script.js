@@ -1,4 +1,4 @@
-import { minimax, checkPlayableMoves, randomPicker, getAlgorithmThinking } from "./minimax.js";
+import { minimax, checkPlayableMoves, randomPicker, getAlgorithmThinking, giveBest } from "./minimax.js";
 
 const body = document.getElementById("body");
 const table = document.createElement("table");
@@ -171,8 +171,11 @@ function clickidy() {
     // setTimeout(() => { randomPicker(playableCells, tixTaxMatrixRender, tixTaxMatrixValue, location) }, 10);
 
     // Calling the minimax algorithm (I'm a literal genius)
-    const movesNum = 4; // The number of moves to predict into the future
+    const movesNum = 3; // The number of moves to predict into the future
     console.log("Evaluation: " + minimax([structuredClone(tixTaxMatrixValue), location, checkPlayableMoves(structuredClone(tixTaxMatrixValue), location)], movesNum, true));
+    let bestMove = giveBest();
+    tixTaxMatrixRender[bestMove[0]][bestMove[1]][bestMove[2]][bestMove[3]].disabled = false;
+    tixTaxMatrixRender[bestMove[0]][bestMove[1]][bestMove[2]][bestMove[3]].click();
     
     // Seeing the algorithm's thinking
     let algorithmThinking = getAlgorithmThinking();
