@@ -1,4 +1,4 @@
-import { minimax, checkPlayableMoves, randomPicker } from "./minimax.js";
+import { minimax, checkPlayableMoves, randomPicker, getAlgorithmThinking } from "./minimax.js";
 
 const body = document.getElementById("body");
 const table = document.createElement("table");
@@ -19,37 +19,48 @@ let bigBoardStatus = [
   ["", "", ""],
 ];
 
+localStorage.removeItem("algorithmThinking");
+
 // The big boi for loop, creates 3 arrays each containing 3 arrays inside of it
 for (let i = 0; i < 3; i++) {
   tixTaxMatrixRender[i] = [[], [], []];
   tixTaxMatrixValue[i] = [[], [], []];
   playableCells[i] = [[], [], []];
+  
   const bigRow = document.createElement("tr"); // The BIG boi roes
   table.appendChild(bigRow); // BIG boi roes appended on!!!
+  
   for (let j = 0; j < 3; j++) {
     tixTaxMatrixRender[i][j] = [[], [], []];
     tixTaxMatrixValue[i][j] = [[], [], []];
     playableCells[i][j] = [[], [], []];
+    
     const bigBox = document.createElement("table");
     bigBox.classList = "miniTable";
     bigBox.id = "miniTable" + i + j;
+    
     const bigBoxCell = document.createElement("td"); // This is the table data cell to contain this BIG boi boxes
     bigBoxCell.id = "bigBox" + i + j;
     bigBoxCell.className = "bigBox";
     bigBoxCell.appendChild(bigBox);
     bigRow.appendChild(bigBoxCell);
+    
     for (let k = 0; k < 3; k++) {
       const smallRow = document.createElement("tr");
       bigBox.appendChild(smallRow);
+      
       tixTaxMatrixRender[i][j][k] = [[], [], []];
       tixTaxMatrixValue[i][j][k] = ["", "", ""];
       playableCells[i][j][k] = ["", "", ""];
+      
       for (let l = 0; l < 3; l++) {
         const btn = document.createElement("button");
         btn.id = "box" + i + j + k + l;
+        btn.className = "cell";
         btn.addEventListener("mouseover", buttonOver);
         btn.addEventListener("mouseout", buttonOut);
         btn.addEventListener("click", clickidy);
+        
         tixTaxMatrixRender[i][j][k][l] = btn;
         smallRow.appendChild(document.createElement("td").appendChild(btn));
       }
@@ -160,7 +171,13 @@ function clickidy() {
     // setTimeout(() => { randomPicker(playableCells, tixTaxMatrixRender, tixTaxMatrixValue, location) }, 10);
 
     // Calling the minimax algorithm (I'm a literal genius)
-    console.log("Evaluation: " + minimax([structuredClone(tixTaxMatrixValue), location, checkPlayableMoves(structuredClone(tixTaxMatrixValue), location)], 4, true));
+    const movesNum = 5; // The number of moves to predict into the future
+    console.log("Evaluation: " + minimax([structuredClone(tixTaxMatrixValue), location, checkPlayableMoves(structuredClone(tixTaxMatrixValue), location)], movesNum, true));
+    
+    // Seeing the algorithm's thinking
+    let algorithmThinking = getAlgorithmThinking();
+    localStorage["algorithmThinking"] = JSON.stringify(algorithmThinking);
+    window.open("./futureGames.html");
   }
 }
 

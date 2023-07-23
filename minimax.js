@@ -3,7 +3,7 @@ import { checkIfBoxMade } from "./script.js";
 let algorithmThinking = [];
 
 export function getAlgorithmThinking() {
-    return JSON.stringify(structuredClone(algorithmThinking));
+    return structuredClone(algorithmThinking.reverse());
 }
 
 export function randomPicker(playableCells, tixTaxMatrixRender, currentBoard, lastPlayedMove) {
