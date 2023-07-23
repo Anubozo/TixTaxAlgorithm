@@ -171,7 +171,7 @@ function clickidy() {
     // setTimeout(() => { randomPicker(playableCells, tixTaxMatrixRender, tixTaxMatrixValue, location) }, 10);
 
     // Calling the minimax algorithm (I'm a literal genius)
-    const movesNum = 5; // The number of moves to predict into the future
+    const movesNum = 2; // The number of moves to predict into the future
     console.log("Evaluation: " + minimax([structuredClone(tixTaxMatrixValue), location, checkPlayableMoves(structuredClone(tixTaxMatrixValue), location)], movesNum, true));
     
     // Seeing the algorithm's thinking

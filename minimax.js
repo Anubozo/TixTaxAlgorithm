@@ -1,6 +1,32 @@
 import { checkIfBoxMade } from "./script.js";
 
 let algorithmThinking = [];
+const advantageCombos = [
+    [
+        [0, 0], [0, 1], [0, 2], // Horizontal 1
+    ],
+    [
+        [1, 0], [1, 1], [1, 2], // Horizontal 2
+    ],
+    [
+        [2, 0], [2, 1], [2, 2], // Horizontal 3
+    ],
+    [
+        [0, 0], [1, 0], [2, 0], // Vertical 1
+    ],
+    [
+        [0, 1], [1, 1], [2, 1], // Vertical 2
+    ],
+    [
+        [0, 2], [1, 2], [2, 2], // Vertical 3
+    ],
+    [
+        [0, 0], [1, 1], [2, 2], // Diagonal 1
+    ],
+    [
+        [0, 2], [1, 1], [2, 0], // Diagonal 2
+    ],
+];
 
 export function getAlgorithmThinking() {
     return structuredClone(algorithmThinking.reverse());
@@ -93,6 +119,52 @@ export function minimax(board, depth, isAI) {
 }
 
 // The evaluator function
+function numericBoardEvaluation(numericBoard){ // AI is positive
+
+    // Check if game has ended
+    for (let i = 0; i < advantageCombos.length; i++) {
+        const combo = advantageCombos[i];
+        const [a, b, c] = combo;
+    
+        if (
+            numericBoard[a[0]][a[1]] == numericBoard[b[0]][b[1]] &&
+            numericBoard[b[0]][b[1]] == numericBoard[c[0]][c[1]]
+        ) {
+          if (numericBoard[a[0]][a[1]] == 1) {
+            return 1;
+          } else if (numericBoard[a[0]][a[1]] == -1) {
+            return -1;
+          }
+        }
+    }
+
+    // Evaluate from advantage combos
+    let advantageWeights = [0, 3, 10]; // Change these values to adjust how much the model values almost completing a 3-in-a-row
+    let advantage = 0;
+    let almostWon = [false, false]; // AI, Human
+    for(let i = 0; i < advantageCombos.length; i++){ // 0 - 8
+        let comboEvaluation = 0;
+        for(let j = 0; j < advantageCombos[0].length; j++){ // 0 - 2
+            let comboEvaluation = numericBoard[advantageCombos[i][j][0]][advantageCombos[i][j][1]];
+        }
+        if(almostWon[0] == true && almostWon[1] == true){
+            return 0;
+        }
+
+        if(advantage == 2){
+            almostWon[0] = true;
+        }
+        if(advantage == -2){
+            almostWon[1] = true;
+        }
+
+        advantage += comboEvaluation;
+    }
+
+    return advantage;
+
+}
+
 function evaluate(board, isAI) {
     let evaluation = 0;
     
@@ -102,6 +174,7 @@ function evaluate(board, isAI) {
     } else {
         evaluation -= 1;
     }
+
     
     // const advantageCombos = [
     //     [
