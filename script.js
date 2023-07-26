@@ -171,17 +171,18 @@ function clickidy() {
     // setTimeout(() => { randomPicker(playableCells, tixTaxMatrixRender, tixTaxMatrixValue, location) }, 10);
 
     // Calling the minimax algorithm (I'm a literal genius)
-    const movesNum = 1; // The number of moves to predict into the future
+    const movesNum = 3; // The number of moves to predict into the future
     console.log("Evaluation: " + minimax([structuredClone(tixTaxMatrixValue), location, checkPlayableMoves(structuredClone(tixTaxMatrixValue), location)], movesNum, true));
-    console.log(giveBest());
-    let bestMove = giveBest();
+    let bestMove = giveBest([structuredClone(tixTaxMatrixValue), location, checkPlayableMoves(structuredClone(tixTaxMatrixValue), location)], movesNum, checkPlayableMoves(structuredClone(tixTaxMatrixValue), location));
     tixTaxMatrixRender[bestMove[0]][bestMove[1]][bestMove[2]][bestMove[3]].disabled = false;
     tixTaxMatrixRender[bestMove[0]][bestMove[1]][bestMove[2]][bestMove[3]].click();
     
+
+
     // Seeing the algorithm's thinking
     let algorithmThinking = getAlgorithmThinking();
     localStorage["algorithmThinking"] = JSON.stringify(algorithmThinking);
-    //window.open("./futureGames.html");
+    window.open("./futureGames.html");
   }
 }
 

@@ -33,7 +33,7 @@ export function getAlgorithmThinking() {
 }
 
 export function randomPicker(playableCells, tixTaxMatrixRender, currentBoard, lastPlayedMove) {
-    console.table(checkPlayableMoves(currentBoard, lastPlayedMove));
+    //console.table(checkPlayableMoves(currentBoard, lastPlayedMove));
     
     console.log("picking random");
     let i;
@@ -56,9 +56,25 @@ export function randomPicker(playableCells, tixTaxMatrixRender, currentBoard, la
 // Blue = AI = True = Maximizer
 // board = [currentBoard, lastPlayedMove, nextPlayableMoves]
 var bestMove = [-1,-1,-1,-1];
-export function giveBest(){
-    return bestMove;
+export function giveBest(board, depth, playableCells){
+    let index = 0;
+    let minEval = Infinity;
+    for(let i = 0; i < playableCells.length; i++){
+
+        
+        let newBoard = structuredClone(board[0]);
+        // Set the current next playable move as played on this copied board
+        newBoard[playableCells[i][0]][playableCells[i][1]][playableCells[i][2]][playableCells[i][3]] = "B";
+        let evaluation = minimax([newBoard, playableCells[i], checkPlayableMoves(newBoard, playableCells[i])], depth, true);
+        console.log(playableCells[i], evaluation);
+        if(evaluation < minEval){
+            minEval = evaluation;
+            index = i;
+        }
+    }
+    return playableCells[index];
 }
+
 export function minimax(board, depth, isAI) {
     // Checking whole game status
     let bigBoardStatus = [
@@ -95,13 +111,13 @@ export function minimax(board, depth, isAI) {
             // Call the minimax function with this new board, the last played move being the current next playable move, the new next playable moves, the depth as 1 less than before, and the other player's turn
             let evaluation = minimax([newBoard, board[2][i], checkPlayableMoves(newBoard, board[2][i])], depth - 1, !isAI);
             // Check to see whether this evaluation is the maximum
-            if(evaluation >= maxEvaluation){
+            if(evaluation > maxEvaluation){
                 bestMove = [board[2][i][0], board[2][i][1], board[2][i][2], board[2][i][3]];
             }
             maxEvaluation = Math.max(maxEvaluation, evaluation);
-            console.log("EVALUATION + MOVE: " + maxEvaluation + " | " + bestMove, newBoard);
+            // console.log("EVALUATION + MOVE: " + maxEvaluation + " | " + bestMove, newBoard);
         }
-        console.log("AI turn: max eval: " + maxEvaluation);
+        // console.log("AI turn: max eval: " + maxEvaluation);
         algorithmThinking.push(board);
         return maxEvaluation;
     } else {
@@ -117,13 +133,13 @@ export function minimax(board, depth, isAI) {
             // Call the minimax function with this new board, the last played move being the current next playable move, the new next playable moves, the depth as 1 less than before, and the other player's turn
             let evaluation = minimax([newBoard, nextMove, checkPlayableMoves(newBoard, nextMove)], depth - 1, !isAI);
             // Check to see whether this evaluation is the minimum
-            if(evaluation <= minEvaluation){
+            if(evaluation < minEvaluation){
                 bestMove = [nextMove[0],nextMove[1],nextMove[2],nextMove[3]];
             }
             minEvaluation = Math.min(minEvaluation, evaluation);
-            console.log("EVALUATION + MOVE" + minEvaluation + " | " +bestMove, newBoard);
+            // console.log("EVALUATION + MOVE" + minEvaluation + " | " +bestMove, newBoard);
         }
-        console.log("Human turn: min eval: " + minEvaluation);
+        // console.log("Human turn: min eval: " + minEvaluation);
         algorithmThinking.push(board);
         return minEvaluation;
     }
@@ -338,6 +354,5 @@ export function checkPlayableMoves(currentBoard, lastPlayedMove) {
             }
         }
     }
-    console.log("PLAYABLE MOVES: ", playableMoves);
     return playableMoves;
 }
